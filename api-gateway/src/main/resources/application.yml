@@ -22,6 +22,7 @@ spring:
                 - Path=/api/patients/**
               filters:
                 - StripPrefix=1
+                - JwtValidation
 
               ## REST CLIENT -> http://localhost:4004/api/patients
               ## API GATEWAY -> http://patient-service:4000
@@ -35,24 +36,10 @@ spring:
               filters:
                 - RewritePath=/api-docs/patients,/v3/api-docs
 
-              ## REST CLIENT -> http://localhost:4004/api-docs/patients
-              ## API GATEWAY -> http://patient-service:4000/v3/api-docs
-              # Route for /api/patients/** to patient-service
-            - id: patient-service-route
-              uri: http://patient-service:4000
+            # Route for /api/docs/auth to auth-service /v3/api-docs
+            - id: api-docs-auth-route
+              uri: http://auth-service:4005
               predicates:
-                - Path=/api/patients/**
+                - Path=/api-docs/auth
               filters:
-                - StripPrefix=1
-
-              ## REST CLIENT -> http://localhost:4004/api/patients
-              ## API GATEWAY -> http://patient-service:4000
-              ## PATIENT SERVICE (SPRING BOOT APP) -> /patients -> Patients Array
-
-              # Route for /api/docs/patients to patient-service /v3/api-docs
-            - id: api-docs-patient-route
-              uri: http://patient-service:4000
-              predicates:
-                - Path=/api-docs/patients
-              filters:
-                - RewritePath=/api-docs/patients,/v3/api-docs
+                - RewritePath=/api-docs/auth,/v3/api-docs
